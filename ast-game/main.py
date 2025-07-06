@@ -10,6 +10,10 @@ def main():
     game_running = True
     pygame.init()
 
+    # FPS
+    clock = pygame.time.Clock()
+    dt = 0
+
     # Initializing screen display with set sizes
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -20,8 +24,15 @@ def main():
             if event.type == pygame.QUIT:
                 return
         
+        # fill the screen with black
         screen.fill("black")
+        # flip refresh the screen
         pygame.display.flip()
+
+        dt = int(clock.tick(60))/1000
+
+
+
 
 
 
