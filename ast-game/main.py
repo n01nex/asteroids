@@ -1,8 +1,10 @@
 import pygame
+import sys
 from player import *
 from constants import *
 from asteroid import *
 from asteroidfield import *
+from shot import *
 
 def main():
 
@@ -17,6 +19,7 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids_gp = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
 
     # FPS
     clock = pygame.time.Clock()
@@ -34,6 +37,9 @@ def main():
     AsteroidField.containers = (updatable)
     af = AsteroidField()
 
+    # Initializing shots
+    Shot.containers = (shots, updatable, drawable)
+
     while game_running:
 
         # Registering the closure of the window and exiting the game loop
@@ -48,6 +54,18 @@ def main():
             drw.draw(screen)
         # update the items after status change like key pressed
         updatable.update(dt)
+
+        for ast in asteroids_gp:
+            if ast.collisions(p1):
+                print("Game over!")
+                game_running = False
+                sys.exit()
+            
+            for sh in shots:
+                if ast.collisions(sh):
+                    sh.kill()
+                    ast.split()  
+
         # flip refreshes the screen
         pygame.display.flip()
         # pauses the loop for 1/60th of a second and stores the value since it was called in milliseconds in dt
